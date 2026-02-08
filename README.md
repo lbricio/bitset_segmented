@@ -8,7 +8,7 @@ High-performance segmented bitset for financial markets, optimized for fast head
 
 * **Segmented Bitset**: stores bits in fixed-size blocks (`segments`) for efficient handling of large index ranges.
 * **Fast head/tail queries**: maintains the smallest and largest set bit (`head` and `tail`) for quick top of book update.
-* **Dynamic memory allocation**: segments are created on-demand, minimizing memory usage.
+* **Dynamic memory allocation**: segments are created on-demand, minimizing memory usage from 16-32GB to 80-160mb (considering 20.000 assets with 200.000 tickers).
 * **Reserve memory**: pre-allocate segments for a maximum index (`reserve_for_max_index`).
 * **C# API**: `extern "C"` functions for cross-language integration.
 
