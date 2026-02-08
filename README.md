@@ -1,6 +1,6 @@
 # Bitset Segmented
 
-High-performance segmented bitset for financial markets, optimized for fast head/tail queries, ideal for price ladders. Also provides a **C# API** for integration.
+High-performance segmented bitset for financial markets, optimized for fast head/tail queries, ideal for price ladders. Also provides a **C# API** for integration purposes.
 
 ---
 
