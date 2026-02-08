@@ -112,6 +112,10 @@ struct bitset_segmented::impl {
 
 bitset_segmented::bitset_segmented() : pimpl(new impl{}) {}
 
+bitset_segmented::~bitset_segmented() {
+    delete pimpl;
+}
+
 void bitset_segmented::set(std::size_t index) {
     auto seg = index / BITSET_SEGMENT_SIZE;
     auto bit = index % BITSET_SEGMENT_SIZE;

@@ -9,12 +9,13 @@
         #define BITSET_API __declspec(dllimport)
     #endif
 #else
-    #define BITSET_API
+    // para Linux/GCC/Clang
+    #define BITSET_API __attribute__((visibility("default")))
 #endif
 
 namespace bsa {
 
-class bitset_segmented {
+class BITSET_API bitset_segmented {
 public:
     bitset_segmented();
     ~bitset_segmented();

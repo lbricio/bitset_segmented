@@ -7,6 +7,8 @@ else()
     set(CMAKE_INSTALL_PREFIX "/usr/local")
 endif()
 
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 add_library(bitset_segmented SHARED
     src/bitset_segmented.cpp
 )
