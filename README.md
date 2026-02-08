@@ -14,6 +14,35 @@ High-performance segmented bitset for financial markets, optimized for fast head
 
 ---
 
+# Benchmark
+
+The following program simulates insertions and removals in a `bitset_segmented` structure, using **PETR4 prices** that varied ±20%.
+
+* **Total insertions:** 100,000,000
+* **Price range:** ±20% around the current PETR4 price
+* **Insertions near head:** ±500 units
+
+## Results
+
+```
+[Insert] Iteration 0 | Head: 2726 | Tail: 2727
+
+Insertion of 100000000 orders took: 2604.55 ms
+
+After removals:
+Head now: 2401
+Tail now: 3062
+Removals took: 1.79 µs
+
+Random access checks took: 2.327 µs
+Unset bits found: 78
+
+Total active orders: 661
+Total simulation time: 2604.63 ms
+```
+
+> Note: Execution times are measured on a laptop with Intel Core i5 13th generation and may vary depending on system load.
+
 ## Class Overview
 
 ### `bsa::bitset_segmented`
