@@ -80,33 +80,26 @@ struct bitset_segmented::impl {
     std::size_t head_index = std::numeric_limits<std::size_t>::max();
     std::size_t tail_index = 0;
 
-    void update_head_from(std::size_t old_head) {
-        auto seg = old_head / BITSET_SEGMENT_SIZE;
-        auto it = segments.lower_bound(seg);
-
-        for (; it != segments.end(); ++it) {
-            auto &s = it->second;
-            if (s->count) {
-                head_index = it->first * BITSET_SEGMENT_SIZE + s->local_min;
-                return;
+    void update_head_from() {
+        std::size_t new_head = std::numeric_limits<std::size_t>::max();
+        for (auto& [seg_idx, arr] : segments) {
+            if (arr && arr->count) {
+                std::size_t candidate = seg_idx * BITSET_SEGMENT_SIZE + arr->local_min;
+                if (candidate < new_head) new_head = candidate;
             }
         }
-        head_index = std::numeric_limits<std::size_t>::max();
+        head_index = new_head;
     }
 
-    void update_tail_from(std::size_t old_tail) {
-        auto seg = (old_tail - 1) / BITSET_SEGMENT_SIZE;
-        auto it = segments.upper_bound(seg);
-
-        while (it != segments.begin()) {
-            --it;
-            auto &s = it->second;
-            if (s->count) {
-                tail_index = it->first * BITSET_SEGMENT_SIZE + s->local_max + 1;
-                return;
+    void update_tail_from() {
+        std::size_t new_tail = 0;
+        for (auto& [seg_idx, arr] : segments) {
+            if (arr && arr->count) {
+                std::size_t candidate = seg_idx * BITSET_SEGMENT_SIZE + arr->local_max + 1;
+                if (candidate > new_tail) new_tail = candidate;
             }
         }
-        tail_index = 0;
+        tail_index = new_tail;
     }
 };
 
@@ -127,8 +120,8 @@ void bitset_segmented::set(std::size_t index) {
     s->set(bit);
 
     if (prev_count == 0) {
-        if (pimpl->head_index > index) pimpl->update_head_from(index);
-        if (pimpl->tail_index < index + 1) pimpl->update_tail_from(index + 1);
+        if (pimpl->head_index > index) pimpl->update_head_from();
+        if (pimpl->tail_index < index + 1) pimpl->update_tail_from();
     } else {
         pimpl->head_index = std::min(pimpl->head_index, index);
         pimpl->tail_index = std::max(pimpl->tail_index, index + 1);
@@ -147,8 +140,8 @@ bool bitset_segmented::unset(std::size_t index) {
 
     s->unset(bit);
 
-    if (index == pimpl->head_index) pimpl->update_head_from(index + 1);
-    if (index + 1 == pimpl->tail_index) pimpl->update_tail_from(index);
+    if (index == pimpl->head_index) pimpl->update_head_from();
+    if (index + 1 == pimpl->tail_index) pimpl->update_tail_from();
 
     return true;
 }
